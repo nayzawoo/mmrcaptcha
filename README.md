@@ -39,6 +39,14 @@ $captcha = $captcha
 
 echo $captcha->response('jpg', 100);
 ```
+# Todos List
+
+- [ ] Docs
+- [ ] Checking Request
+- [ ] Frontend Support
+- [ ] Laravel Support
+- [ ] Custom Font
+- [ ] Add More Testings
 
 # Testing
 
