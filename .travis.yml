@@ -7,7 +7,7 @@ php:
   - 7.0
   - nightly
   - hhvm
-
+ 
 matrix:
     allow_failures:
         - php: 7.0
@@ -21,9 +21,8 @@ before_install:
   - printf "\n" | pecl install imagick-beta
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.4" ]]; then echo "extension = imagick.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
 
-script: ./vendor/bin/phpunit
+before_script:
+  - composer self-update
+  - composer install --prefer-source --no-interaction --dev
 
-notifications:
-    email:
-        on_success: never
-        on_failure: always
+script: phpunit
