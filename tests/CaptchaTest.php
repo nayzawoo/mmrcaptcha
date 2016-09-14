@@ -3,7 +3,7 @@
 
 use MyanmarCaptcha\Captcha;
 
-class CaptchaTest extends \PHPUnit\Framework\TestCase {
+class CaptchaTest extends PHPUnit_Framework_TestCase {
 
     /**
      * @var Captcha

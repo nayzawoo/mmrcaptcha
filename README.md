@@ -1,4 +1,9 @@
 # Myanmar Math CAPTCHA
+
+[![Build Status](https://travis-ci.org/Bodawpaya/mmcaptcha.svg?branch=master)](https://travis-ci.org/Bodawpaya/mmcaptcha)
+
+PHP Math CAPTCHA with Myanmar Font
+
 ![Example](examples/1.jpg)
 ![Example](examples/2.jpg)
 ![Example](examples/3.jpg)
@@ -7,13 +12,15 @@
 ![Example](examples/6.jpg)
 ![Example](examples/7.jpg)
 ![Example](examples/8.jpg)
+
 # Requirements
 
-- PHP 5.4+
+- PHP >= 5.4
+- GD Library (>=2.0) [or] Imagick PHP extension (>=6.5.7)
 
 # Installation
 	
-	composer require bodawpaya/mmcaptcha
+	composer require bodawpaya/mmcaptcha:dev-master
 
 # Usage
 
@@ -44,9 +51,10 @@ echo $captcha->response('jpg', 100);
 - [ ] Docs
 - [ ] Checking Request
 - [ ] Frontend Support
-- [ ] Laravel Support
+- [ ] Laravel integration
 - [ ] Custom Font
-- [ ] Add More Testings
+- [ ] Add More Unit Tests
+- [ ] Coding Standards
 
 # Testing
 
