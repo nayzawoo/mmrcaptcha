@@ -21,8 +21,9 @@ before_install:
   - printf "\n" | pecl install imagick-beta
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.4" ]]; then echo "extension = imagick.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi
 
-script: phpunit
+script: ./vendor/bin/phpunit
 
 notifications:
-    on_success: never
-    on_failure: always
+    email:
+        on_success: never
+        on_failure: always
