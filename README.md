@@ -1,6 +1,6 @@
 # Myanmar Math CAPTCHA
 
-[![Build Status](https://travis-ci.org/Bodawpaya/mmcaptcha.svg?branch=master)](https://travis-ci.org/Bodawpaya/mmcaptcha)
+[![Build Status](https://travis-ci.org/nayzawoo/mmcaptcha.svg?branch=master)](https://travis-ci.org/nayzawoo/mmcaptcha)
 
 PHP Math CAPTCHA with Myanmar Font
 
@@ -20,7 +20,7 @@ PHP Math CAPTCHA with Myanmar Font
 
 # Installation
 	
-	composer require bodawpaya/mmcaptcha:dev-master
+	composer require mmcaptcha/mmcaptcha:dev-master
 
 # Usage
 
