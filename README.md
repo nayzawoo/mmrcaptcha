@@ -48,10 +48,8 @@ echo $captcha->response('jpg', 100);
 ```
 # Todos List
 
-- [ ] Checking Request
 - [ ] Custom Font
 - [ ] Add More Unit Tests
-- [ ] Coding Standards
 
 # Testing
 
