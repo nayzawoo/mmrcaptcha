@@ -131,9 +131,9 @@ class Captcha implements CaptchaBuilderInterface
 
         // Effects
 
+        $this->disortImage($this->mainCanvas);
         $this->drawVerticalLines($this->mainCanvas);
         $this->drawHorizontalLines($this->mainCanvas);
-        $this->disortImage($this->mainCanvas);
         $this->mergeCanvas($this->backgroundCanvas, $this->mainCanvas);
         $this->captchaImage = $this->mainCanvas;
         $this->invertImage($this->captchaImage);
@@ -174,7 +174,7 @@ class Captcha implements CaptchaBuilderInterface
             return $image;
         }
 
-        $x_period = 100;
+        $x_period = 10;
         $x_amplitude = 5;
         $tempImage = $this->mainCanvas->getCore();
         $width = $width ? $width : $this->width;
@@ -306,7 +306,7 @@ class Captcha implements CaptchaBuilderInterface
             $w = $box[2] - $box[0];
             $offset = 0;
             if ($this->enabledEffects) {
-                $offset = rand(-3, 3);
+                $offset = rand(-5, 0);
             }
             $str = $this->encodeChar($phrase[$i]);
             $image->text(
@@ -321,7 +321,7 @@ class Captcha implements CaptchaBuilderInterface
                         $font->size($this->fontSize);
                     }
                     if ($this->enabledEffects) {
-                        $font->angle(rand(-3, 3));
+                        $font->angle(rand(-10, 10));
                     }
                     if ($textColor = $this->textColor) {
                         $font->color($textColor);

@@ -48,17 +48,14 @@ echo $captcha->response('jpg', 100);
 ```
 # Todos List
 
-- [ ] Docs
 - [ ] Checking Request
-- [ ] Frontend Support
-- [ ] Laravel integration
 - [ ] Custom Font
 - [ ] Add More Unit Tests
 - [ ] Coding Standards
 
 # Testing
 
-	$ vendor/bin/phpunit
+	$ ./vendor/bin/phpunit
 
 # License
 
