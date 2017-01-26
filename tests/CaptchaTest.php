@@ -23,9 +23,10 @@ class CaptchaTest extends PHPUnit_Framework_TestCase {
             ->disableDistortion()
             ->disableEffects()
             ->fontSize(20)
+            ->fontPath(__DIR__.'/../src/assets/mon3.ttf')
             ->verticalLines(5)
             ->invert()
-            ->dots(19)
+            ->dots(100)
             ->height(50);
         $this->captcha->build();
     }

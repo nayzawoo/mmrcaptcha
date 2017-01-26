@@ -51,7 +51,13 @@ class CaptchaStringGenerator implements CaptchaStringGeneratorInterface
             return $question;
         }
 
-        return preg_split("//u", $question, -1, PREG_SPLIT_NO_EMPTY);
+        $strArray = preg_split("//u", $question, -1, PREG_SPLIT_NO_EMPTY);
+
+        foreach ($strArray as &$value) {
+            $value = $this->encodeChar($value);
+        }
+
+        return $strArray;
     }
 
     /**
@@ -144,6 +150,19 @@ class CaptchaStringGenerator implements CaptchaStringGeneratorInterface
         throw new \Exception("Invalid Math String");
     }
 
+    protected function encodeChar($text)
+    {
+        return mb_convert_encoding($text, "HTML-ENTITIES", "UTF-8");
+    }
+
+    /**
+     * Generate Height Quality Random Integer
+     *
+     * @param $min
+     * @param $max
+     *
+     * @return int
+     */
     protected function generateInt($min, $max)
     {
         return $this->randomGenerator->generateInt($min, $max);

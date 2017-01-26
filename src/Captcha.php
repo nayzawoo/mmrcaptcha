@@ -35,7 +35,7 @@ class Captcha implements CaptchaBuilderInterface
     /**
      * @var Image
      */
-    protected $mainCanvas;
+    public $mainCanvas;
 
     protected $bgColor;
 
@@ -47,14 +47,14 @@ class Captcha implements CaptchaBuilderInterface
 
     protected $bgImage;
 
-    protected $fontPath;
+    protected $fontPath = __DIR__.'/assets/mon3.ttf';
 
     protected $textColor;
 
     /**
      * @var Image
      */
-    protected $backgroundCanvas = false;
+    public $backgroundCanvas;
 
     protected $horizontalLines = 0;
 
@@ -63,7 +63,7 @@ class Captcha implements CaptchaBuilderInterface
     /**
      * @var Image
      */
-    protected $captchaImage;
+    public $captchaImage;
 
     protected $dots = 1000;
 
@@ -77,7 +77,6 @@ class Captcha implements CaptchaBuilderInterface
     public function __construct(CaptchaStringGeneratorInterface $stringGenerator)
     {
         $this->imageManager = new ImageManager();
-        $this->fontPath = __DIR__.'/assets/mon3.ttf';
         $this->stringGenerator = $stringGenerator;
     }
 
@@ -248,7 +247,7 @@ class Captcha implements CaptchaBuilderInterface
             if ($this->enabledEffects) {
                 $offset = rand(-5, 0);
             }
-            $str = $this->encodeChar($phrase[$i]);
+            $str = $phrase[$i];
             $image->text($str, $x, $y + $offset, function ($font) {
                 $font->file($this->fontPath);
                 if ($this->enabledEffects) {
@@ -461,9 +460,16 @@ class Captcha implements CaptchaBuilderInterface
         return $this;
     }
 
-    private function encodeChar($text)
+    /**
+     * @param $fontPath
+     *
+     * @return $this
+     */
+    public function fontPath($fontPath)
     {
-        return mb_convert_encoding($text, "HTML-ENTITIES", "UTF-8");
+        $this->fontPath = $fontPath;
+
+        return $this;
     }
 
     /**

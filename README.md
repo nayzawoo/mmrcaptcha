@@ -38,6 +38,7 @@ $captcha = $captcha
     ->width(180)
     ->height(50)
     ->fontSize(40)
+    ->fontPath(__DIR__.'/src/assets/mon3.ttf')
     ->textColor("#000000")
     ->backgroundColor("#FFFFFF")
     ->backgroundImage("./src/assets/bg1.png")
