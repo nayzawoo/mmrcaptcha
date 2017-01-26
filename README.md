@@ -20,16 +20,20 @@ PHP Math CAPTCHA with Myanmar Font
 
 # Installation
 	
-	composer require mmcaptcha/mmcaptcha:dev-master
+	composer require mmcaptcha/mmcaptcha
 
 # Usage
+## Create Captcha Image
 
 ```php
 <?php
 
 require 'vendor/autoload.php';
 
-$captcha = (new MyanmarCaptcha\Captcha());
+use MyanmarCaptcha\Captcha;
+use MyanmarCaptcha\CaptchaStringGenerator;
+
+$captcha = new Captcha(new CaptchaStringGenerator);
 $captcha = $captcha
     ->width(180)
     ->height(50)
@@ -44,12 +48,17 @@ $captcha = $captcha
     ->invert()
     ->build();
 
+
 echo $captcha->response('jpg', 100);
 ```
-# Todos List
 
-- [ ] Custom Font
-- [ ] Add More Unit Tests
+## Check Answer
+
+```php
+$captcha->getAnswer(); // 20
+$captcha->check(20); // true
+$captcha->check(5); // false
+```
 
 # Testing
 

@@ -2,6 +2,7 @@
 
 
 use MyanmarCaptcha\Captcha;
+use MyanmarCaptcha\CaptchaStringGenerator;
 
 class CaptchaTest extends PHPUnit_Framework_TestCase {
 
@@ -11,12 +12,9 @@ class CaptchaTest extends PHPUnit_Framework_TestCase {
     private $captcha;
 
     public function setUp() {
-        $this->captcha = new Captcha();
+        $this->captcha = new Captcha(new CaptchaStringGenerator);
     }
 
-    /**
-     *
-     */
     public function testOptions() {
         $this->captcha->width(200)
             ->textColor("#FF0000")
