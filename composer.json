@@ -1,11 +1,11 @@
 {
-    "name": "mmcaptcha/mmcaptcha",
+    "name": "nayzawoo/mmrcaptcha",
     "description": "Myanmar Captcha",
     "license": "MIT",
     "authors": [
         {
-            "name": "Bodawpaya",
-            "email": "bodawphaya@gmail.com"
+            "name": "Nay Zaw Oo",
+            "email": "nayzawoo.me@gmail.com"
         }
     ],
     "autoload": {

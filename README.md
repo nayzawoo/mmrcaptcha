@@ -20,7 +20,7 @@ PHP Math CAPTCHA with Myanmar Font
 
 # Installation
 	
-	composer require mmcaptcha/mmcaptcha
+	composer require nayzawoo/mmrcaptcha
 
 # Usage
 ## Create Captcha Image
