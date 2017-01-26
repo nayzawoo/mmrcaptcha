@@ -48,8 +48,8 @@ $captcha = $captcha
     ->invert()
     ->build();
 
-
-echo $captcha->response('jpg', 100);
+$imageQuality = 100;
+echo $captcha->response('jpg', $imageQuality);
 ```
 
 ## Check Answer
