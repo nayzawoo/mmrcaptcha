@@ -1,6 +1,6 @@
 <?php
 
-use MyanmarCaptcha\CaptchaStringGenerator;
+use MyanmarCaptcha\CaptchaString;
 
 class CaptchaStringTest extends PHPUnit_Framework_TestCase
 {
@@ -10,13 +10,13 @@ class CaptchaStringTest extends PHPUnit_Framework_TestCase
     protected $captcha;
 
     /**
-     * @var CaptchaStringGenerator
+     * @var CaptchaString
      */
     private $generator;
 
     public function setUp()
     {
-        $this->generator = new CaptchaStringGenerator;
+        $this->generator = new CaptchaString;
         $this->captcha = new \MyanmarCaptcha\Captcha($this->generator);
     }
 

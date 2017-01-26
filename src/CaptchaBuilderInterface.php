@@ -11,7 +11,7 @@ namespace MyanmarCaptcha;
 
 interface CaptchaBuilderInterface
 {
-    public function __construct(CaptchaStringGeneratorInterface $captchaStringGenerator);
+    public function __construct(CaptchaStringInterface $captchaStringGenerator);
 
     /**
      * Init Captcha Image Builder

@@ -2,7 +2,7 @@
 
 namespace MyanmarCaptcha;
 
-interface CaptchaStringGeneratorInterface
+interface CaptchaStringInterface
 {
     public function generateQuestion();
 

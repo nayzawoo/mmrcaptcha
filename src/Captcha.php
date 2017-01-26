@@ -18,7 +18,7 @@ use Intervention\Image\ImageManager;
 /**
  * Class Captcha
  *
- * @property CaptchaStringGeneratorInterface stringGenerator
+ * @property CaptchaStringInterface $captchaString
  * @package MyanmarCaptcha\Captcha
  */
 class Captcha implements CaptchaBuilderInterface
@@ -70,14 +70,14 @@ class Captcha implements CaptchaBuilderInterface
     protected $fontSize = 22;
 
     /**
-     * @var CaptchaStringGeneratorInterface
+     * @var CaptchaStringInterface
      */
     protected $stringGenerator;
 
-    public function __construct(CaptchaStringGeneratorInterface $stringGenerator)
+    public function __construct(CaptchaStringInterface $stringGenerator)
     {
         $this->imageManager = new ImageManager();
-        $this->stringGenerator = $stringGenerator;
+        $this->captchaString = $stringGenerator;
     }
 
     /**
@@ -231,7 +231,7 @@ class Captcha implements CaptchaBuilderInterface
      */
     protected function renderText(Image $image)
     {
-        $phrase = $this->stringGenerator->getGeneratedQuestion('mm', 'array');
+        $phrase = $this->captchaString->getGeneratedQuestion('mm', 'array');
         $length = count($phrase);
         $size = $this->width / $length - rand(0, 2) - 1;
         $box = imagettfbbox($size, 0, $this->fontPath, (pow(10, $length + 1))."");
@@ -479,7 +479,7 @@ class Captcha implements CaptchaBuilderInterface
      */
     public function check($ans)
     {
-        return $this->stringGenerator->check($ans);
+        return $this->captchaString->check($ans);
     }
 
     /**
@@ -487,6 +487,6 @@ class Captcha implements CaptchaBuilderInterface
      */
     public function getAnswer()
     {
-        return $this->stringGenerator->getAnswer();
+        return $this->captchaString->getAnswer();
     }
 }

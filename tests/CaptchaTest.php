@@ -2,7 +2,7 @@
 
 
 use MyanmarCaptcha\Captcha;
-use MyanmarCaptcha\CaptchaStringGenerator;
+use MyanmarCaptcha\CaptchaString;
 
 class CaptchaTest extends PHPUnit_Framework_TestCase {
 
@@ -12,7 +12,7 @@ class CaptchaTest extends PHPUnit_Framework_TestCase {
     private $captcha;
 
     public function setUp() {
-        $this->captcha = new Captcha(new CaptchaStringGenerator);
+        $this->captcha = new Captcha(new CaptchaString);
     }
 
     public function testOptions() {

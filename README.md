@@ -31,9 +31,9 @@ PHP Math CAPTCHA with Myanmar Font
 require 'vendor/autoload.php';
 
 use MyanmarCaptcha\Captcha;
-use MyanmarCaptcha\CaptchaStringGenerator;
+use MyanmarCaptcha\CaptchaString;
 
-$captcha = new Captcha(new CaptchaStringGenerator);
+$captcha = new Captcha(new CaptchaString);
 $captcha = $captcha
     ->width(180)
     ->height(50)
