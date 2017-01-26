@@ -1,6 +1,6 @@
 # Myanmar Math CAPTCHA
 
-[![Build Status](https://travis-ci.org/nayzawoo/mmcaptcha.svg?branch=master)](https://travis-ci.org/nayzawoo/mmcaptcha)
+[![Build Status](https://api.travis-ci.org/nayzawoo/mmrcaptcha.svg?branch=master)](https://travis-ci.org/nayzawoo/mmrcaptcha)
 
 PHP Math CAPTCHA with Myanmar Font
 
