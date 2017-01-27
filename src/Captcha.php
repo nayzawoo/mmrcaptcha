@@ -14,6 +14,7 @@ namespace MyanmarCaptcha;
 use Colors\RandomColor;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
+use RandomLib\Factory;
 
 /**
  * Class Captcha
@@ -47,7 +48,7 @@ class Captcha implements CaptchaBuilderInterface
 
     protected $bgImage;
 
-    protected $fontPath = __DIR__.'/assets/mon3.ttf';
+    protected $fontPath;
 
     protected $textColor;
 
@@ -74,9 +75,29 @@ class Captcha implements CaptchaBuilderInterface
      */
     protected $stringGenerator;
 
+    /**
+     * @var \RandomLib\Generator
+     */
+    protected $randomGenerator;
+
+    /**
+     * @var Image
+     */
+    protected $effectCanvas;
+
+    /**
+     * @var string
+     */
+    public $randomColor;
+
+    public $singleColor = false;
+
     public function __construct(CaptchaStringInterface $stringGenerator)
     {
+        $this->fontPath = __DIR__.'/assets/mon3.ttf';
+        $this->randomGenerator = (new Factory)->getMediumStrengthGenerator();
         $this->imageManager = new ImageManager();
+        $this->randomColor = $this->randomColor();
         $this->captchaString = $stringGenerator;
     }
 
@@ -89,16 +110,18 @@ class Captcha implements CaptchaBuilderInterface
 
         // Text
         $this->renderText($this->mainCanvas);
+        $this->distortImage($this->mainCanvas);
 
         // Background
         $this->drawBackground($this->backgroundCanvas);
+        $this->mergeCanvas($this->backgroundCanvas, $this->mainCanvas);
 
         // Effects
+        $this->drawVerticalLines($this->effectCanvas);
+        $this->drawHorizontalLines($this->effectCanvas);
+        $this->distortImage($this->effectCanvas);
+        $this->mergeCanvas($this->mainCanvas, $this->effectCanvas);
 
-        $this->distortImage($this->mainCanvas);
-        $this->drawVerticalLines($this->mainCanvas);
-        $this->drawHorizontalLines($this->mainCanvas);
-        $this->mergeCanvas($this->backgroundCanvas, $this->mainCanvas);
         $this->captchaImage = $this->mainCanvas;
         $this->invertImage($this->captchaImage);
 
@@ -108,8 +131,8 @@ class Captcha implements CaptchaBuilderInterface
     protected function createCanvas()
     {
         $this->mainCanvas = $this->imageManager->canvas($this->width, $this->height);
-
         $this->backgroundCanvas = $this->imageManager->canvas($this->width, $this->height, $this->bgColor);
+        $this->effectCanvas = $this->imageManager->canvas($this->width, $this->height);
     }
 
     protected function mergeCanvas(Image $background, Image $mask)
@@ -123,23 +146,24 @@ class Captcha implements CaptchaBuilderInterface
      * @param Image $image
      * @param int   $width
      * @param int   $height
+     * @param int   $x_period
+     * @param int   $x_amplitude
      *
      * @return $this
      */
-    protected function distortImage(Image $image, $width = 0, $height = 0)
+    protected function distortImage(Image $image, $width = 0, $height = 0, $x_period = 10, $x_amplitude = 5)
     {
         if ( ! $this->enabledDistortion) {
             return $this;
         }
 
-        $x_period = 20;
-        $x_amplitude = 5;
-        $tempImage = $this->mainCanvas->getCore();
+        $tempImage = $image->getCore();
+
         $width = $width ? $width : $this->width;
         $height = $height ? $height : $this->height;
         $canvas = $this->imageManager->canvas($width, $height)->getCore();
         $xp = $x_period;
-        $k = rand(0, 10);
+        $k = $this->rand(0, 10);
 
         for ($a = 0; $a < $width; $a++) {
             imagecopy($canvas, $tempImage, $a - 1, sin($k + $a / $xp) * $x_amplitude, $a, 0, 1, $height);
@@ -175,10 +199,11 @@ class Captcha implements CaptchaBuilderInterface
 
         $tempImage = $this->imageManager->canvas($this->width, $this->height, '#FFFFFF')->getCore();
 
-        $pixel_color = imagecolorallocate($tempImage, rand(100, 150), rand(100, 150), rand(100, 150));
+        $pixel_color = imagecolorallocate($tempImage, $this->rand(100, 150), $this->rand(100, 150),
+            $this->rand(100, 150));
 
         for ($i = 0; $i < $this->dots; $i++) {
-            imagesetpixel($tempImage, rand() % $this->width, rand() % $this->height, $pixel_color);
+            imagesetpixel($tempImage, $this->rand() % $this->width, $this->rand() % $this->height, $pixel_color);
         }
 
         $this->backgroundCanvas = $image->setCore($tempImage);
@@ -194,8 +219,19 @@ class Captcha implements CaptchaBuilderInterface
         $tempImage = $image->getCore();
 
         for ($i = 0; $i < $this->horizontalLines; $i++) {
-            $line_color = imagecolorallocate($tempImage, rand(100, 200), rand(100, 200), rand(100, 200));
-            imageline($tempImage, 0, rand() % $this->height, 200, rand() % $this->width, $line_color);
+            if ($this->singleColor) {
+                $rgba = $this->hex2rgb($this->randomColor);
+                $line_color = imagecolorallocate($tempImage, $rgba[0], $rgba[1], $rgba[2]);
+            } else {
+                $line_color = imagecolorallocate($tempImage, mt_rand(100, 255), mt_rand(100, 255), mt_rand(100, 255));
+            }
+
+            imagesetthickness($tempImage, (mt_rand(5, 30) / 10));
+            $x1 = $this->rand(0, $this->width / 3);
+            $x2 = $this->rand($this->width / 3, $this->width);
+            $y1 = $this->rand(0, $this->height);
+            $y2 = $this->rand(0, $this->height);
+            imageline($tempImage, $x1, $y1, $x2, $y2, $line_color);
         }
 
         $image->setCore($tempImage);
@@ -213,7 +249,12 @@ class Captcha implements CaptchaBuilderInterface
         $lineSpace = $this->width / $this->verticalLines;
 
         for ($i = 0; $i < $this->verticalLines; $i++) {
-            $lineColor = imagecolorallocate($tempImage, rand(100, 200), rand(100, 200), rand(100, 200));
+            if ($this->singleColor) {
+                $rgba = $this->hex2rgb($this->randomColor);
+                $lineColor = imagecolorallocate($tempImage, $rgba[0], $rgba[1], $rgba[2]);
+            } else {
+                $lineColor = imagecolorallocate($tempImage, mt_rand(100, 255), mt_rand(100, 255), mt_rand(100, 255));
+            }
 
             imageline($tempImage, $i * $lineSpace, 0, $i * $lineSpace + $lineSpace / 2, $this->height, $lineColor);
             imageline($tempImage, $i * $lineSpace, 0, $i * $lineSpace - $lineSpace / 2, $this->height, $lineColor);
@@ -233,7 +274,7 @@ class Captcha implements CaptchaBuilderInterface
     {
         $phrase = $this->captchaString->getGeneratedQuestion('mm', 'array');
         $length = count($phrase);
-        $size = $this->width / $length - rand(0, 2) - 1;
+        $size = $this->width / $length - $this->rand(0, 2) - 1;
         $box = imagettfbbox($size, 0, $this->fontPath, (pow(10, $length + 1))."");
         $textWidth = $box[2] - $box[0];
         $textHeight = $box[1] - $box[7];
@@ -245,23 +286,27 @@ class Captcha implements CaptchaBuilderInterface
             $w = $box[2] - $box[0];
             $offset = 0;
             if ($this->enabledEffects) {
-                $offset = rand(-5, 0);
+                $offset = $this->rand(-1, 1);
             }
             $str = $phrase[$i];
             $image->text($str, $x, $y + $offset, function ($font) {
                 $font->file($this->fontPath);
                 if ($this->enabledEffects) {
-                    $font->size(rand($this->fontSize - 1, $this->fontSize + 1));
+                    $font->size($this->rand($this->fontSize - 1, $this->fontSize + 1));
                 } else {
                     $font->size($this->fontSize);
                 }
                 if ($this->enabledEffects) {
-                    $font->angle(rand(-10, 10));
+                    $font->angle($this->rand(-10, 10));
                 }
                 if ($textColor = $this->textColor) {
                     $font->color($textColor);
                 } else {
-                    $font->color($this->randomColor());
+                    if ($this->singleColor) {
+                        $font->color($this->randomColor);
+                    } else {
+                        $font->color($this->randomColor());
+                    }
                 }
             });
             $x += $w;
@@ -488,5 +533,36 @@ class Captcha implements CaptchaBuilderInterface
     public function getAnswer()
     {
         return $this->captchaString->getAnswer();
+    }
+
+    /**
+     * Generate Height Quality Random Integer
+     *
+     * @param $min
+     * @param $max
+     *
+     * @return int
+     */
+    protected function rand($min = 0, $max = 1)
+    {
+        return $this->randomGenerator->generateInt($min, $max);
+    }
+
+    protected function hex2rgb($hex)
+    {
+        $hex = str_replace("#", "", $hex);
+
+        if (strlen($hex) == 3) {
+            $r = hexdec(substr($hex, 0, 1).substr($hex, 0, 1));
+            $g = hexdec(substr($hex, 1, 1).substr($hex, 1, 1));
+            $b = hexdec(substr($hex, 2, 1).substr($hex, 2, 1));
+        } else {
+            $r = hexdec(substr($hex, 0, 2));
+            $g = hexdec(substr($hex, 2, 2));
+            $b = hexdec(substr($hex, 4, 2));
+        }
+        $rgb = [ $r, $g, $b ];
+
+        return $rgb; // returns an array with the rgb values
     }
 }

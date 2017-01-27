@@ -33,7 +33,7 @@ class CaptchaString implements CaptchaStringInterface
      */
     public function __construct()
     {
-        $this->randomGenerator = (new Factory)->getHighStrengthGenerator();
+        $this->randomGenerator = (new Factory)->getMediumStrengthGenerator();
         $this->question = $this->generateQuestion();
     }
 
@@ -53,9 +53,9 @@ class CaptchaString implements CaptchaStringInterface
 
         $strArray = preg_split("//u", $question, -1, PREG_SPLIT_NO_EMPTY);
 
-        foreach ($strArray as &$value) {
-            $value = $this->encodeChar($value);
-        }
+        //foreach ($strArray as &$value) {
+        //    $value = $this->encodeChar($value);
+        //}
 
         return $strArray;
     }
@@ -65,19 +65,19 @@ class CaptchaString implements CaptchaStringInterface
      */
     public function generateQuestion()
     {
-        $type = $this->generateInt(0, 3);
+        $type = $this->rand(0, 3);
         switch ($type) {
             case 0:
                 // [1-20]+[1-9]
-                return $this->generateInt(1, 30)."+".$this->generateInt(1, 9);
+                return $this->rand(1, 30)."+".$this->rand(1, 9);
             case 1:
                 // [1-9]0-[1-9]
-                return $this->generateInt(1, 9)."0-".$this->generateInt(1, 8);
+                return $this->rand(1, 9)."0-".$this->rand(1, 8);
             case 2:
                 // [10,20,30]*[2-5]
                 $items = [ 10, 20, 30 ];
 
-                return $items[array_rand($items)]."*".$this->generateInt(2, 9);
+                return $items[array_rand($items)]."*".$this->rand(2, 9);
             case 3:
                 // 30/[2,3,10,15]
                 $items = [ 2, 3, 10, 15 ];
@@ -163,7 +163,7 @@ class CaptchaString implements CaptchaStringInterface
      *
      * @return int
      */
-    protected function generateInt($min, $max)
+    protected function rand($min, $max)
     {
         return $this->randomGenerator->generateInt($min, $max);
     }
