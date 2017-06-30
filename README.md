@@ -53,18 +53,6 @@ $imageQuality = 100;
 echo $captcha->response('jpg', $imageQuality);
 ```
 
-## Check Answer
-
-```php
-$captcha->getAnswer(); // 20
-$captcha->check(20); // true
-$captcha->check(5); // false
-```
-
-# Testing
-
-	$ ./vendor/bin/phpunit
-
 # License
 
 This library is released under the MIT License. See [License](LICENSE) file for more details.
