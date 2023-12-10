@@ -22,7 +22,7 @@ use RandomLib\Factory;
  * @property CaptchaStringInterface $captchaString
  * @package MyanmarCaptcha\Captcha
  */
-class Captcha implements CaptchaBuilderInterface
+class Captcha
 {
     protected $width = 120;
 

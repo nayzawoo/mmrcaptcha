@@ -4,7 +4,7 @@ namespace MyanmarCaptcha;
 
 use RandomLib\Factory;
 
-class CaptchaString implements CaptchaStringInterface
+class CaptchaString
 {
     protected $question;
 
